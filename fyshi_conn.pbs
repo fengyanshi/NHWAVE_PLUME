@@ -1,0 +1,37 @@
+#!/bin/bash                                                                                                                                       
+#PBS -l select=40:ncpus=36:mpiprocs=30                                                                                                             
+#PBS -l walltime=15:00:00                                                                                                                         
+#PBS -A ONRDC40882490                                                                                                                             
+#PBS -j oe                                                                                                                                        
+#PBS -q standard_sm                                                                                                                               
+#PBS -N plume                                                                                                                              
+#PBS -M fyshi@udel.edu                                                                                                                      
+#PBS -m be                                                                                                                                        
+#PBS -l application=other                                                                                                                         
+
+FUNWAVE=${HOME}/NHWAVE/PKG4TOPAZ
+EXEC=${FUNWAVE}/bin/nhwave
+
+INPUT=${PBS_O_WORKDIR}/model_5m_40
+BATHYMETRY=${PBS_O_WORKDIR}/model_5m_40
+WAVEDATA=${PBS_O_WORKDIR}/finer_init
+
+# create work output dir in workspace                                                                                                             
+HOUR=1
+RUNDIR=${WORKDIR}/connecticut
+mkdir -p ${RUNDIR}
+mkdir -p ${RUNDIR}/output
+
+# copy input work data files to RUNDIR                                                                                                            
+cp ${INPUT}/input.txt ${RUNDIR}/input.txt
+cp ${INPUT}/coupling.txt ${RUNDIR}/coupling.txt
+cp ${INPUT}/time0.dat ${RUNDIR}/time0.dat
+cp ${BATHYMETRY}/dep_fine.txt ${RUNDIR}/dep_fine.txt
+cp ${WAVEDATA}/*.txt ${RUNDIR}/.
+
+cd ${RUNDIR}
+
+
+mpiexec_mpt -n 1200 ${EXEC}
+
+exit
