@@ -67,7 +67,7 @@
            T_inlet=15.0                      ! change
            S_sea=25.0                        ! change
            T_sea=15.0                        ! change
-           V_river = -1.0                    ! change
+           V_river = -0.4                    ! change
            S_river = 5.0                     ! change
            A_river = 0.075                     ! change
 
