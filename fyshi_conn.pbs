@@ -1,6 +1,6 @@
 #!/bin/bash                                                                                                                                       
-#PBS -l select=40:ncpus=36:mpiprocs=30                                                                                                             
-#PBS -l walltime=15:00:00                                                                                                                         
+#PBS -l select=16:ncpus=36:mpiprocs=36                                                                                                             
+#PBS -l walltime=00:55:00                                                                                                                         
 #PBS -A ONRDC40882490                                                                                                                             
 #PBS -j oe                                                                                                                                        
 #PBS -q standard_sm                                                                                                                               
@@ -12,13 +12,13 @@
 FUNWAVE=${HOME}/NHWAVE/PKG4TOPAZ
 EXEC=${FUNWAVE}/bin/nhwave
 
-INPUT=${PBS_O_WORKDIR}/model_5m_40
-BATHYMETRY=${PBS_O_WORKDIR}/model_5m_40
-WAVEDATA=${PBS_O_WORKDIR}/finer_init
+INPUT=${PBS_O_WORKDIR}/conn_model_5m_40
+BATHYMETRY=${PBS_O_WORKDIR}/conn_model_5m_40
+WAVEDATA=${PBS_O_WORKDIR}/conn_model_5m_40
 
 # create work output dir in workspace                                                                                                             
 HOUR=1
-RUNDIR=${WORKDIR}/connecticut
+RUNDIR=${WORKDIR}/conn_model_5m_40
 mkdir -p ${RUNDIR}
 mkdir -p ${RUNDIR}/output
 
@@ -26,12 +26,12 @@ mkdir -p ${RUNDIR}/output
 cp ${INPUT}/input.txt ${RUNDIR}/input.txt
 cp ${INPUT}/coupling.txt ${RUNDIR}/coupling.txt
 cp ${INPUT}/time0.dat ${RUNDIR}/time0.dat
-cp ${BATHYMETRY}/dep_fine.txt ${RUNDIR}/dep_fine.txt
-cp ${WAVEDATA}/*.txt ${RUNDIR}/.
+cp ${BATHYMETRY}/dep_fine.txt ${RUNDIR}/depth.txt
+cp ${WAVEDATA}/*.ini ${RUNDIR}/.
 
 cd ${RUNDIR}
 
 
-mpiexec_mpt -n 1200 ${EXEC}
+mpiexec_mpt -n 576 ${EXEC}
 
 exit

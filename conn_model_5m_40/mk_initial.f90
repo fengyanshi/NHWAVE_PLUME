@@ -22,7 +22,7 @@
 
 100      format(1000f12.3)
 
-         open(2,file='eta_init.txt')
+         open(2,file='eta_init.ini')
 
          do j=1,n
           write(2,100)(var2D(i,j),i=1,m)
@@ -39,7 +39,7 @@
 
 !     
 
-         open(2,file='u_init.txt')
+         open(2,file='u_init.ini')
 
          do k=1,l
          do j=1,n
@@ -57,7 +57,7 @@
          enddo
 
 
-         open(2,file='v_init.txt')
+         open(2,file='v_init.ini')
 
          do k=1,l
          do j=1,n
@@ -66,7 +66,7 @@
          enddo
          close(2)
 
-         open(2,file='w_init.txt')
+         open(2,file='w_init.ini')
 
          do k=1,l
          do j=1,n
@@ -75,7 +75,7 @@
          enddo
          close(2)
 
-         open(2,file='p_init.txt')
+         open(2,file='p_init.ini')
 
          do k=1,l
          do j=1,n
@@ -84,7 +84,7 @@
          enddo
          close(2)
 
-         open(2,file='eps_init.txt')
+         open(2,file='eps_init.ini')
 
          do k=1,l
          do j=1,n
@@ -93,7 +93,7 @@
          enddo
          close(2)
 
-         open(2,file='tke_init.txt')
+         open(2,file='tke_init.ini')
 
          do k=1,l
          do j=1,n
@@ -104,7 +104,7 @@
 
 
 
-         open(2,file='mu_init.txt')
+         open(2,file='mu_init.ini')
 
          do k=1,l
          do j=1,n
@@ -113,7 +113,7 @@
          enddo
          close(2)
 
-         open(2,file='prod_init.txt')
+         open(2,file='prod_init.ini')
 
          do k=1,l
          do j=1,n
@@ -131,7 +131,7 @@
          enddo
          enddo
 
-         open(2,file='rho_init.txt')
+         open(2,file='rho_init.ini')
 
          do k=1,l
          do j=1,n
@@ -148,7 +148,7 @@
          enddo
          enddo
 
-         open(2,file='sali_init.txt')
+         open(2,file='sali_init.ini')
 
          do k=1,l
          do j=1,n
@@ -166,7 +166,7 @@
          enddo
          enddo
 
-         open(2,file='temp_init.txt')
+         open(2,file='temp_init.ini')
 
          do k=1,l
          do j=1,n

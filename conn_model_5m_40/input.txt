@@ -14,34 +14,33 @@ Ndep = 3
 MainGridRatio = 10
 ! -----------------HOT START----------------------------------
 HOTSTART = T
-Eta_HotStart_File = ../finer_init/eta_init.txt
-U_HotStart_File = ../finer_init/u_init.txt
-V_HotStart_File = ../finer_init/v_init.txt
-W_HotStart_File = ../finer_init/w_init.txt
-P_HotStart_File = ../finer_init/p_init.txt
-Sali_HotStart_File = ../finer_init/sali_init.txt
-Temp_HotStart_File = ../finer_init/temp_init.txt
-Rho_HotStart_File = ../finer_init/rho_init.txt
-TKE_HotStart_File = ../finer_init/tke_init.txt
-EPS_HotStart_File = ../finer_init/eps_init.txt
+Eta_HotStart_File = eta_init.ini
+U_HotStart_File = u_init.ini
+V_HotStart_File = v_init.ini
+W_HotStart_File = w_init.ini
+P_HotStart_File = p_init.ini
+Sali_HotStart_File = sali_init.ini
+Temp_HotStart_File = temp_init.ini
+Rho_HotStart_File = rho_init.ini
+TKE_HotStart_File = tke_init.ini
+EPS_HotStart_File = eps_init.ini
 ! ---------------- RESULT_FOLDER-------------------------------
-RESULT_FOLDER = /lustre/scratch/fyshi/conn/result_finer/
-! RESULT_FOLDER = ./Results/A/
+RESULT_FOLDER = output/
 ! ----------------------BATHYMETRY---------------------------
 ! if analytical bathymetry
 DEPTH_TYPE = CELL_CENTER
 ANA_BATHY  = F
-DEPTH_FILE = ../fine/dep_fine.txt
+DEPTH_FILE = depth.txt
 ! --------------------DIMENSION---------------------------------
 ! cell numbers
-Mglob = 1200
-Nglob = 600
+Mglob = 1152
+Nglob = 576
 Kglob = 40
 
 ! --------------------PROCESSOR NUMBER-------------------------
 ! processors in x and y direction (for parallel run)
-PX = 16
-PY = 6
+PX = 36
+PY = 16
 
 ! -----------------------TIME----------------------------------
 ! time: total computational time/ plot time / screen interval 

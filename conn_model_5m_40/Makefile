@@ -22,8 +22,8 @@
 #--------------------------------------------------------------------------
          CPP      = /usr/bin/cpp 
          CPPFLAGS = $(DEF_FLAGS)
-#         FC       = ifort
-         FC        = mpif90
+         FC       = ifort
+#         FC        = mpif90
          DEBFLGS  = 
          OPT      = #-g
          CLIB     = 
