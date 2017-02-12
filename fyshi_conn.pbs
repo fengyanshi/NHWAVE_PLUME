@@ -9,7 +9,7 @@
 #PBS -m be                                                                                                                                        
 #PBS -l application=other                                                                                                                         
 
-FUNWAVE=${HOME}/NHWAVE/PKG4TOPAZ
+FUNWAVE=${HOME}/NHWAVE/NHWAVE_PLUME
 EXEC=${FUNWAVE}/bin/nhwave
 
 INPUT=${PBS_O_WORKDIR}/conn_model_5m_40
