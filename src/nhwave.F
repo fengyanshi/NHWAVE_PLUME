@@ -6757,9 +6757,14 @@
      INTEGER,INTENT(IN) :: ngr  ! fyshi
 
      ! laminar viscosity
-     do k = Kbeg,Kend
-     do j = Jbeg,Jend
-     do i = Ibeg,Iend
+     ! I think theres a bug here. ghost cells are not included, Cmu in ghostcells will be
+     ! used later. fyshi 02/23/2017
+!        do k = Kbeg,Kend
+!        do j = Jbeg,Jend
+!        do i = Ibeg,Iend
+     do k = 1,Kloc
+     do j = 1,Nloc
+     do i = 1,Mloc
 # if defined (SEDIMENT)
        if(trim(Sed_Type)=='COHESIVE') then
          if(Conc(i,j,k)<0.1) then
