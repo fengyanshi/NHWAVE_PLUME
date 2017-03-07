@@ -11533,6 +11533,12 @@ SUBROUTINE hot_start
 # if defined (SALINITY)
 ! sali
      call sali_bc(1)  
+
+# if defined (PARALLEL)
+     call phi_3D_exch(Sali)
+     call phi_3D_exch(Temp)
+# endif
+
 # endif  
 
      do k = 1,Kloc
