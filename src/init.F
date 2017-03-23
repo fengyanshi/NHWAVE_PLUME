@@ -836,7 +836,7 @@ END SUBROUTINE INITIALIZATION
               EyL(Mloc,Nloc1,Kloc),EyR(Mloc,Nloc1,Kloc),FyL(Mloc,Nloc1,Kloc),  &
               FyR(Mloc,Nloc1,Kloc), &
               GyL(Mloc,Nloc1,Kloc),GyR(Mloc,Nloc1,Kloc),HyL(Mloc,Nloc1,Kloc),  &
-              HyR(Mloc1,Nloc1,Kloc), &
+              HyR(Mloc,Nloc1,Kloc), &
               Ex(Mloc1,Nloc,Kloc),Ey(Mloc,Nloc1,Kloc),&
               Ez(Mloc,Nloc,Kloc1),&
               Fx(Mloc1,Nloc,Kloc),  &
