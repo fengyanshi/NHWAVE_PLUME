@@ -5224,7 +5224,7 @@
 # endif
 
 
-     IF(TID_FLX_LR)THEN
+     IF(BOUNDARY(1:10)=='TID_FLX_LR')THEN
        CALL VELOCITY_LEFT_RIGHT
      ENDIF
 
@@ -11787,8 +11787,15 @@ SUBROUTINE VELOCITY_LEFT_RIGHT
        Uin_Xn(j,k)= Utmp2*MASK(Iend,J)*Z_pct_East(K-Nghost)
        Win_Xn(j,k) = 0.0
        Vin_Xn(j,k) = 0.0
+
+# if defined (SALINITY)
+       Sin_X0(j,k) = Stmp1*MASK(Ibeg,J)
+       Sin_Xn(j,k) = Stmp2*MASK(Ibeg,J)
+# endif
+
      enddo
      enddo  
+
 
 ! force elevation at left and right boundaries
 ! to avoid over-shooting 
