@@ -638,8 +638,8 @@
      do k = Kbeg,Kend1
      do j = Jbeg,Jend
      do i = Ibeg,Iend
-       DelxS(i,j,k) = (1.-sig(k))/D(i,j)*DelxH(i,j)-sig(k)/D(i,j)*DelxEta(i,j)
-       DelyS(i,j,k) = (1.-sig(k))/D(i,j)*DelyH(i,j)-sig(k)/D(i,j)*DelyEta(i,j)
+       DelxS(i,j,k) = (1.-sig(k))/D(i,j)*DelxH(i,j)*MASK9(I,J)-sig(k)/D(i,j)*DelxEta(i,j)
+       DelyS(i,j,k) = (1.-sig(k))/D(i,j)*DelyH(i,j)*MASK9(I,J)-sig(k)/D(i,j)*DelyEta(i,j)
        DelzS(i,j,k) = 1./D(i,j)
 
        A1(i,j,k) = DelxS(i,j,k)*DelxS(i,j,k)+DelyS(i,j,k)*DelyS(i,j,k)+  &
@@ -1665,7 +1665,8 @@
 # endif
 
            if(k==Kbeg) then
-             Wbot = -DeltH(i,j)-U(i,j,Kbeg)*DelxH(i,j)-V(i,j,Kbeg)*DelyH(i,j) 
+             Wbot = -DeltH(i,j)-U(i,j,Kbeg)*DelxH(i,j)*MASK9(I,J)  &
+                    -V(i,j,Kbeg)*DelyH(i,j)*MASK9(I,J) 
              Rhs0(Nlen) = DW(i,j,k)+dt*R4(i,j,k)+  &
                 dt/D(i,j)*(0.5*(Cmu(i,j,k-1)+Cmu(i,j,k)+&
                    CmuR(i,j,k-1)+CmuR(i,j,k))+0.5*(CmuVt(i,j,k-1)+CmuVt(i,j,k))/Schmidt)/  &
@@ -1748,6 +1749,27 @@
      enddo
      enddo
 
+     ! if running hydrostatic mode, replace vertical velocity
+     ! in fact, w is only for output and estimate dt
+     ! large dH/dx at interface of mask may cause large W and small dt
+     if(.not.NON_HYDRO) then
+       do i = Ibeg,Iend
+       do j = Jbeg,Jend
+       do k = Kbeg,Kend
+         W(i,j,k) = 0.5*(Omega(i,j,k)+Omega(i,j,k+1))-  &
+              DeltH(i,j)+sigc(k)*(D(i,j)-D0(i,j))/dt-U(i,j,k)*&
+                   ((1.0-sigc(k))*DelxH(i,j)*MASK9(I,J)+sigc(k)*DelxEta(i,j))-  &
+              V(i,j,k)*((1.0-sigc(k))*DelyH(i,j)*MASK9(I,J)+sigc(k)*DelyEta(i,j))
+         if(Mask(i,j)==0) W(i,j,k) = Zero
+         DW(i,j,k) = D(i,j)*W(i,j,k)         
+       enddo
+       enddo
+       enddo
+
+!       ! update velocity field
+!       call get_UVW(ng)   ! fyshi
+     endif
+
 # if defined(FROUDE_CAP)
      DO K=Kbeg,Kend
      DO J=Jbeg,Jend
@@ -1801,25 +1823,6 @@
 ! old code     enddo
 ! old code     enddo
 
-     ! if running hydrostatic mode, replace vertical velocity
-     ! in fact, W is useless. Only for output
-     if(.not.NON_HYDRO) then
-       do i = Ibeg,Iend
-       do j = Jbeg,Jend
-       do k = Kbeg,Kend
-         W(i,j,k) = 0.5*(Omega(i,j,k)+Omega(i,j,k+1))-  &
-              DeltH(i,j)+sigc(k)*(D(i,j)-D0(i,j))/dt-U(i,j,k)*&
-                   ((1.0-sigc(k))*DelxH(i,j)+sigc(k)*DelxEta(i,j))-  &
-              V(i,j,k)*((1.0-sigc(k))*DelyH(i,j)+sigc(k)*DelyEta(i,j))
-         if(Mask(i,j)==0) W(i,j,k) = Zero
-         DW(i,j,k) = D(i,j)*W(i,j,k)         
-       enddo
-       enddo
-       enddo
-
-       ! update velocity field
-       call get_UVW(ng)   ! fyshi
-     endif
 
 # if defined (VEGETATION)
      deallocate(qz)
@@ -3950,8 +3953,8 @@
      ! source terms for momentum eqs.
      do j = Jbeg,Jend
      do i = Ibeg,Iend
-       SourceX(i,j) = Grav*Eta(i,j)*DelxH(i,j)*Mask(i,j)
-       SourceY(i,j) = Grav*Eta(i,j)*DelyH(i,j)*Mask(i,j)
+       SourceX(i,j) = Grav*Eta(i,j)*DelxH(i,j)*Mask9(i,j)
+       SourceY(i,j) = Grav*Eta(i,j)*DelyH(i,j)*Mask9(i,j)
      enddo
      enddo
 
@@ -4579,7 +4582,8 @@
        Phi = dmin1(Phi,2.0)
 
        if(Bc_Z0==1) then  ! free-slip
-         Wbot = -DeltH(i,j)-U(i,j,Kbeg)*DelxH(i,j)-V(i,j,Kbeg)*DelyH(i,j)
+         Wbot = -DeltH(i,j)-U(i,j,Kbeg)*DelxH(i,j)*MASK9(I,J)  &
+                -V(i,j,Kbeg)*DelyH(i,j)*MASK9(I,J)
          do k = 1,Nghost
            U(i,j,Kbeg-k) = U(i,j,Kbeg+k-1)
            V(i,j,Kbeg-k) = V(i,j,Kbeg+k-1)
@@ -4602,8 +4606,8 @@
          do k = 1,Nghost
            U(i,j,Kbeg-k) = (1.0-Phi)*U(i,j,Kbeg+k-1)
            V(i,j,Kbeg-k) = (1.0-Phi)*V(i,j,Kbeg+k-1)
-           Wbot = -DeltH(i,j)-0.5*(U(i,j,Kbeg)+U(i,j,Kbeg-1))*DelxH(i,j)-  &
-                    0.5*(V(i,j,Kbeg)+V(i,j,Kbeg-1))*DelyH(i,j)
+           Wbot = -DeltH(i,j)-0.5*(U(i,j,Kbeg)+U(i,j,Kbeg-1))*DelxH(i,j)*MASK9(I,J)-  &
+                    0.5*(V(i,j,Kbeg)+V(i,j,Kbeg-1))*DelyH(i,j)*MASK9(I,J)
            W(i,j,Kbeg-k) = 2.0*Wbot-W(i,j,Kbeg+k-1)
            DU(i,j,Kbeg-k) = D(i,j)*U(i,j,Kbeg-k)
            DV(i,j,Kbeg-k) = D(i,j)*V(i,j,Kbeg-k)
@@ -6071,7 +6075,7 @@
      ! derivatives of water depth at cell center
      do j = 1,Nloc
      do i = 1,Mloc
-       DelxH(i,j) = (Hfx(i+1,j)-Hfx(i,j))/dx
+       DelxH(i,j) = (Hfx(i+1,j)-Hfx(i,j))/dx  ! watch masks
        DelyH(i,j) = (Hfy(i,j+1)-Hfy(i,j))/dy
      enddo
      enddo
@@ -6631,7 +6635,7 @@
 !--------------------------------------------------
      use global, only: Zero,DelxSc,DelySc,D,DelxH,DelyH, &
                        DelxEta,DelyEta,sigc,Mloc,Nloc,Kloc,Kloc1,&
-                       SP,dx,dy,dsig,Hc,SMALL
+                       SP,dx,dy,dsig,Hc,SMALL, MASK9
 # if defined (OBSTACLE)
      USE GLOBAL, ONLY : Surf_Mask, Surf_Mask_top, Surf_Mask_bottom, &
                         Eta
@@ -6733,8 +6737,8 @@
     do k = 1,Kloc
      do j = 1,Nloc
      do i = 1,Mloc
-       DelxSc(i,j,k) =(1.0-sigc(k))/D(i,j)*DelxH(i,j)-sigc(k)/D(i,j)*DelxEta(i,j) 
-       DelySc(i,j,k) =(1.0-sigc(k))/D(i,j)*DelyH(i,j)-sigc(k)/D(i,j)*DelyEta(i,j)
+       DelxSc(i,j,k) =(1.0-sigc(k))/D(i,j)*DelxH(i,j)*MASK9(I,J)-sigc(k)/D(i,j)*DelxEta(i,j) 
+       DelySc(i,j,k) =(1.0-sigc(k))/D(i,j)*DelyH(i,j)*MASK9(I,J)-sigc(k)/D(i,j)*DelyEta(i,j)
      enddo
      enddo
      enddo
