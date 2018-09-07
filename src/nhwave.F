@@ -11074,7 +11074,7 @@
 !-----------------------------------------------------------------------------
     use global
     implicit none
-    integer, parameter :: kbb = 201
+    integer, parameter :: kbb = 501
     integer, parameter :: kbbm1 = kbb-1
     real(SP), dimension(Kloc) :: zm,rhos,pbxs,pbys
     real(SP), dimension(kbb) :: phy_z,rhoztmp,pbx,pby
