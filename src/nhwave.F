@@ -4196,7 +4196,7 @@
        do i = Ibeg,Iend
          if(xstat(n)>=x(i).and.xstat(n)<=x(i+1).and.  &
             ystat(n)>=y(j).and.ystat(n)<=y(j+1)) then
-           write(iu,'(100E12.4)') time,eta(i,j),(u(i,j,k),v(i,j,k),w(i,j,k),k=Kbeg,Kend)
+           write(iu,'(100E16.8)') time,eta(i,j),(u(i,j,k),v(i,j,k),w(i,j,k),k=Kbeg,Kend)
          endif
        enddo
        enddo
