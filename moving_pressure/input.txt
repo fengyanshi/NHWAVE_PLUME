@@ -33,7 +33,7 @@ ANA_BATHY  = F
 DEPTH_FILE = depth.txt
 ! --------------------DIMENSION---------------------------------
 ! cell numbers
-Mglob = 1152
+Mglob = 1024
 Nglob = 3
 Kglob = 40
 
@@ -127,7 +127,7 @@ TOL = 1.e-8
 ! periodic=.true. : periodic boundary condition in y direction
 ! Notice if periodic=.true., Nglob must be power-of-two.
 ! No periodic boundaries in serial run.
-PERIODIC_X = F
+PERIODIC_X = T
 PERIODIC_Y = F
 
 ! ------------------EXTERNAL FORCING------------------------------

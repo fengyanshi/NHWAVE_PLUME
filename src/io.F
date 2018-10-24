@@ -1070,7 +1070,7 @@ END SUBROUTINE READ_INPUT
      write(3,102) 'Printing file No.',Icount,' TIME/TOTAL: ',TIME,'/',TOTAL_TIME
 # endif
 102  FORMAT(A20,I4,A14,F16.3,A2,F16.3)
-100  FORMAT(7000E16.6)
+100  FORMAT(15000E16.6)
 
      I1 = mod(Icount/1000,10)
      I2 = mod(Icount/100,10)
@@ -1246,7 +1246,7 @@ SUBROUTINE PREVIEW_AMR(ng)
      write(3,102) 'Printing file No.',Ioutput,' TIME/TOTAL: ',TIME,'/',TOTAL_TIME
 # endif
 102  FORMAT(A20,I4,A14,F16.3,A2,F16.3)
-100  FORMAT(7000E16.6)
+100  FORMAT(15000E16.6)
 
      I1 = mod(Ioutput/1000,10)
      I2 = mod(Ioutput/100,10)
@@ -1445,7 +1445,7 @@ END SUBROUTINE PREVIEW_AMR
       enddo
       close(5)
     endif
-100 FORMAT(7000f15.5)
+100 FORMAT(15000f15.5)
 
     end subroutine putfile2D_AMR
 
@@ -1508,7 +1508,7 @@ END SUBROUTINE PREVIEW_AMR
       enddo
       close(5)
     endif
-100 FORMAT(7000f15.5)
+100 FORMAT(15000f15.5)
 
     end subroutine putfile2D
 
@@ -1597,7 +1597,7 @@ END SUBROUTINE PREVIEW_AMR
       enddo
       close(5)
     endif
-100 FORMAT(7000f15.5)
+100 FORMAT(15000f15.5)
 
     deallocate(philoc)
     deallocate(xx)
@@ -1686,7 +1686,7 @@ END SUBROUTINE PREVIEW_AMR
       enddo
       close(5)
     endif
-100 FORMAT(7000E16.8)
+100 FORMAT(15000E16.8)
 
     deallocate(philoc)
     deallocate(xx)
@@ -1725,7 +1725,7 @@ END SUBROUTINE PREVIEW_AMR
 # endif 
 ! end debug
      close(5)
- 100 FORMAT(7000f15.5)
+ 100 FORMAT(15000f15.5)
 
 # if defined (AMR)
      end subroutine putfile2D_AMR
@@ -1764,7 +1764,7 @@ END SUBROUTINE PREVIEW_AMR
 # endif
 ! end debug
      close(5)
- 100 FORMAT(7000f15.5)
+ 100 FORMAT(15000f15.5)
 
 
 # if defined (AMR)
