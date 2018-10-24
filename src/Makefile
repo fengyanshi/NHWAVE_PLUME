@@ -9,14 +9,14 @@
 #--------------------------------------------------------------------------
 #--------------------------------------------------------------------------
          FLAG_1 = -DDOUBLE_PRECISION
-         FLAG_2 = -DPARALLEL
+#         FLAG_2 = -DPARALLEL
 #         FLAG_3 = -DLANDSLIDE
           FLAG_4 = -DSALINITY
           FLAG_5 = -DTEMPERATURE
 #           FLAG_6 = -DBUBBLE
 #         FLAG_7 = -DSEDIMENT
 #         FLAG_8 = -DVEGETATION
-          FLAG_9 = -DINTEL
+#          FLAG_9 = -DINTEL
 #          FLAG_10 = -DFOAM
           FLAG_11 = -DCOUPLING
 #         FLAG_12 = -DDEBUG
@@ -32,8 +32,8 @@
 #--------------------------------------------------------------------------
          CPP      = /usr/bin/cpp 
          CPPFLAGS = $(DEF_FLAGS)
-          FC       = ifort
-#         FC        = mpif90
+#          FC       = ifort
+         FC        = mpif90
 #         FC       = mpiifort
          DEBFLGS  = 
          OPT      = #-g
@@ -54,9 +54,9 @@
 #--------------------------------------------------------------------------
 #  Libraries           
 #--------------------------------------------------------------------------
-         HYPRELIBS  = -L/p/home/fshi/NHWAVE/hypre-2.11.1/src/hypre/lib -lHYPRE
-         INCS  = -I/p/home/fshi/NHWAVE/hypre-2.11.1/src/hypre/include
-         LIBS = $(HYPRELIBS) $(MPILIB)
+           LIBS  = -L/Users/fengyanshi15/Public/hypre-2.8.0b/src/hypre/lib -lHYPRE
+           INCS  = -I/Users/fengyanshi15/Public/hypre-2.8.0b/src/hypre/include
+
 #--------------------------------------------------------------------------
 #  Preprocessing and Compilation Directives
 #--------------------------------------------------------------------------
