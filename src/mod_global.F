@@ -49,6 +49,11 @@
      real(SP), dimension(:,:,:), allocatable :: Vbg
 # endif
 
+# if defined (AIR_PRESSURE)
+     real(SP), dimension(:,:), allocatable :: Pmb
+     CHARACTER(LEN=80) :: Pmb_HotStart_File
+# endif
+
 # if defined (SEDIMENT)
      real(SP), parameter :: Spor = 0.4
      real(SP), parameter :: Srho = 2650.

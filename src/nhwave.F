@@ -808,7 +808,7 @@
 
 
 # if defined(OBSTACLE)
-! 3D masks fyshi 06/08/2104
+! 3D masks fyshi 06/08/2014
      do i = Ibeg,Iend
      do j = Jbeg,Jend
      do k = Kbeg,Kend
@@ -1163,6 +1163,14 @@
      do j = Jbeg,Jend
      do i = Ibeg,Iend
        ic = indx(i,j,k)
+
+# if defined (AIR_PRESSURE)
+!  air pressure
+       Rhs(ic) = Rhs(ic) - Rho0*( Coef(ic,4)*Pmb(I,J-1) + Coef(ic,5)*Pmb(I-1,J) &
+                                + Coef(ic,6)*Pmb(I,J) &
+                            + Coef(ic,7)*Pmb(I+1,J) + Coef(ic,8)*Pmb(I,J+1) )
+# endif
+
        Coef(ic,4) = Zero
        Coef(ic,5) = Zero
        Coef(ic,6) = Zero
@@ -11503,6 +11511,11 @@ SUBROUTINE hot_start
 
 # endif
 
+# if defined (AIR_PRESSURE)
+     file=TRIM(Pmb_HotStart_File)
+     call read_2d(Pmb,file)  
+# endif
+
 ! prepare all initials
 
 ! eta
@@ -11539,6 +11552,11 @@ SUBROUTINE hot_start
      call phi_3D_exch(U)
      call phi_3D_exch(V)
      call phi_3D_exch(W)
+# if defined (AIR_PRESSURE)
+     call phi_2D_coll(Pmb)
+# endif
+  ! endif air pressure
+
 # endif
 
 # if defined (SALINITY)

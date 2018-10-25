@@ -227,6 +227,10 @@
      Sed_Xn = Zero
 # endif
 
+# if defined(AIR_PRESSURE)
+     Pmb = ZERO
+# endif
+
 # if defined (SALINITY)
     IF(INI_SALI_INPUT(1:4)=='CONS')THEN
      Sali = INI_SALI
@@ -874,6 +878,10 @@ END SUBROUTINE INITIALIZATION
 # if defined (TEMPERATURE)
      ALLOCATE(Temp(Mloc,Nloc,Kloc),DTemp(Mloc,Nloc,Kloc),DTemp0(Mloc,Nloc,Kloc))                                    
      ALLOCATE(Tin_X0(Nloc,Kloc),Tin_Xn(Nloc,Kloc))
+# endif
+
+# if defined (AIR_PRESSURE)
+     ALLOCATE(Pmb(Mloc,Nloc))
 # endif
 
 # if defined (VEGETATION)

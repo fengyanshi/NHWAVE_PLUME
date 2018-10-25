@@ -24,8 +24,9 @@ Temp_HotStart_File = temp_init.ini
 Rho_HotStart_File = rho_init.ini
 TKE_HotStart_File = tke_init.ini
 EPS_HotStart_File = eps_init.ini
+Pmb_HotStart_File = pmb_init.ini
 ! ---------------- RESULT_FOLDER-------------------------------
-RESULT_FOLDER = output/
+RESULT_FOLDER = ../../../tmp2/
 ! ----------------------BATHYMETRY---------------------------
 ! if analytical bathymetry
 DEPTH_TYPE = CELL_CENTER
@@ -33,9 +34,9 @@ ANA_BATHY  = F
 DEPTH_FILE = depth.txt
 ! --------------------DIMENSION---------------------------------
 ! cell numbers
-Mglob = 1024
+Mglob = 512
 Nglob = 3
-Kglob = 40
+Kglob = 30
 
 ! --------------------PROCESSOR NUMBER-------------------------
 ! processors in x and y direction (for parallel run)
@@ -46,9 +47,9 @@ PY = 1
 ! time: total computational time/ plot time / screen interval 
 ! all in seconds
 SIM_STEPS = 100000000
-TOTAL_TIME =9000.0
+TOTAL_TIME =900.0
 PLOT_START = 0.0
-PLOT_INTV = 60.0
+PLOT_INTV = 10.0
 SCREEN_INTV = 10.0
 
 ! ------------------------GRID----------------------------------
@@ -87,7 +88,7 @@ NON_HYDRO = T
 ! --------------------COURANT_NUMBER---------------------------------
 CFL = 0.5
 ! --------------------Fourde Cap ----------------------------------
-FROUDE_CAP = 0.25
+FROUDE_CAP = 10.0
 ! ---------------------RAMP-UP--------------------------------
 ! time to ramp up simulation
 TRAMP = 0.0

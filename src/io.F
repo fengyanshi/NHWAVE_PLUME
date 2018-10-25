@@ -302,6 +302,10 @@ SUBROUTINE READ_INPUT
        CALL GET_STRING_VAL(TKE_HotStart_File,FILE_NAME,'TKE_HotStart_File',line,ierr)
        CALL GET_STRING_VAL(EPS_HotStart_File,FILE_NAME,'EPS_HotStart_File',line,ierr)
       ENDIF
+# if defined (AIR_PRESSURE)
+       CALL GET_STRING_VAL(Pmb_HotStart_File,FILE_NAME,'Pmb_HotStart_File',line,ierr)
+# endif
+
      ENDIF ! end hotstart
 
 # if defined (FROUDE_CAP)

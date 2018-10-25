@@ -1,16 +1,49 @@
-         parameter(m=1152,n=3,m1=720,n1=480,l=40,l1=39)
+         parameter(m=512,n=3,m1=720,n1=480,l=30,l1=39)
          real,dimension(m,n) :: var2D
-         real,dimension(m,n,l) :: var3D
+         real,dimension(m,n,l) :: var3D,Zsigma
          real,dimension(m1,n1) :: var2D_fine
          real,dimension(m1,n1,l1)  :: var3D_fine
-         real :: eta_left,eta_right,Temp,Sali,Usea
-         integer :: i,j,nk
+         real :: eta_left,eta_right,Temp,Sali,Usea,r,dx,dy,x_c,y_c,sigma,a
+         real :: S_top,S_mid,S_bot,Lev_mid,dep
+         real,dimension(m) :: xx
+         real,dimension(n) :: yy
+         integer :: i,j,nk,k
 
          eta_left = 0.0
          eta_right = -0.0
          Temp=15.0
          Sali=25.0
-         Usea=1.0
+         Usea=13.0
+
+         S_top = 23.0
+         S_mid = 23.2
+         S_bot = 24.0
+         Lev_mid = 3.0
+         dep=10.0
+
+         do k=1,l
+         do j=1,n
+         do i=1,m
+           Zsigma(i,j,k)=dep*(1.0-(k-1.0)/(l-1.0))
+         enddo
+         enddo
+         enddo
+
+         dx=5.0
+         dy=5.0
+         x_c=1000.0
+! width (m)
+         sigma = 200.0
+! height (cm)
+         a=500.0
+         
+
+         do i=1,m
+           xx(i)=(i-1.0)*dx
+         enddo
+         do j=1,n
+           yy(i)=(j-1.0)*dy
+         enddo
 
          do j=1,n
          do i=1,m
@@ -28,6 +61,22 @@
           write(2,100)(var2D(i,j),i=1,m)
          enddo
          close(2)
+
+! Pmb
+         do j=1,n
+         do i=1,m
+           r=xx(i)-x_c
+           Var2D(i,j)=a*exp(-r**2/(sigma/4.0)**2)          
+         enddo
+         enddo
+
+         open(2,file='pmb_init.ini')
+
+         do j=1,n
+          write(2,100)(var2D(i,j),i=1,m)
+         enddo
+         close(2)
+
 
          do k=1,l
          do j=1,n
@@ -144,6 +193,21 @@
          do j=1,n
          do i=1,m
            var3D(i,j,k)=Sali
+         enddo
+         enddo
+         enddo
+
+! sali
+
+         do k=1,l
+         do j=1,n
+         do i=1,m
+           if(Zsigma(i,j,k).ge.Lev_mid)then
+! linear     Var3D(i,j,k)=S_bot+(S_mid-S_bot)*(dep-Zsigma(i,j,k))/(dep-Lev_mid)
+     Var3D(i,j,k)=S_mid+(S_bot-S_mid)*tanh((Zsigma(i,j,k)-Lev_mid)/dep*10.0)
+           else
+     Var3D(i,j,k)=S_mid+(S_top-S_mid)*(Lev_mid-Zsigma(i,j,k))/(Lev_mid)    
+           endif
          enddo
          enddo
          enddo
