@@ -1,4 +1,4 @@
-         parameter(m=512,n=3,m1=720,n1=480,l=30,l1=39)
+         parameter(m=512,n=1,m1=720,n1=480,l=30,l1=39)
          real,dimension(m,n) :: var2D
          real,dimension(m,n,l) :: var3D,Zsigma
          real,dimension(m1,n1) :: var2D_fine

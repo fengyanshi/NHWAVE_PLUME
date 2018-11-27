@@ -10,7 +10,7 @@ SubGrid_FILE = subgrid_info.txt
 NESTING_X1D = T
 DEPTH_FULL_FILE = dep_1d.txt
 Mdep = 1800
-Ndep = 3
+Ndep = 1
 MainGridRatio = 10
 ! -----------------HOT START----------------------------------
 HOTSTART = T
