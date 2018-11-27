@@ -10829,6 +10829,7 @@
     do k = Kbeg,Kend
       do i = 1,Nghost
         DSali(Ibeg-i,j,k) = DSali(Ibeg+i-1,j,k)
+        Sali(Ibeg-i,j,k) = Sali(Ibeg+i-1,j,k)
       enddo
     enddo
     enddo
@@ -10849,6 +10850,7 @@
     do k = Kbeg,Kend
       do i = 1,Nghost
         DSali(Iend+i,j,k) = DSali(Iend-i+1,j,k)
+        Sali(Iend+i,j,k) = Sali(Iend-i+1,j,k)
       enddo
     enddo
     enddo
@@ -10875,6 +10877,7 @@
     do k = Kbeg,Kend
       do j = 1,Nghost
         DSali(i,Jbeg-j,k) = DSali(i,Jbeg+j-1,k)
+        Sali(i,Jbeg-j,k) = Sali(i,Jbeg+j-1,k)
       enddo
     enddo
     enddo
@@ -10895,6 +10898,7 @@
     do k = Kbeg,Kend
       do j = 1,Nghost
         DSali(i,Jend+j,k) = DSali(i,Jend-j+1,k)
+        Sali(i,Jend+j,k) = Sali(i,Jend-j+1,k)
       enddo
     enddo
     enddo
@@ -10914,14 +10918,198 @@
     do j = Jbeg,Jend
       do k = 1,Nghost
         DSali(i,j,Kbeg-k) = DSali(i,j,Kbeg+k-1)
+        Sali(i,j,Kbeg-k) = Sali(i,j,Kbeg+k-1)
       enddo
       do k = 1,Nghost
         DSali(i,j,Kend+k) = DSali(i,j,Kend-k+1)
+        Sali(i,j,Kend+k) = Sali(i,j,Kend-k+1)
       enddo
     enddo
     enddo
 
     end subroutine sali_bc
+
+! temp
+    subroutine temp_bc(ngr)
+!-------------------------------------------------------------------
+!
+!   Boundary conditions for temp
+!   change: add ngr for AMR fyshi
+!------------------------------------------------------------------
+    use global
+# if defined (AMR)
+     USE NESTING, ONLY : nesting_x1d
+# endif
+    implicit none
+    integer :: i,j,k,II,JJ
+    INTEGER,INTENT(IN) :: ngr   ! fyshi
+
+! mirror bounary conditions at masks
+! fyshi change the ghost cells 04/28/2015
+! correction 3/3, 04/28/2015
+
+      DO K=Kbeg,Kend
+      DO J=Jbeg,Jend
+      DO I=Ibeg,Iend
+        IF(Mask(I,J)==0)THEN
+! west
+         IF(Mask(I-1,J)==1)THEN
+            DTemp(I,J,K)=DTemp(I-1,J,K)
+            Sali(I,J,K)=Sali(I-1,J,K)
+         ENDIF
+! east 
+         IF(Mask(I+1,J)==1)THEN
+            DTemp(I,J,K)=DTemp(I+1,J,K)
+            Temp(I,J,K)=Temp(I+1,J,K)
+         ENDIF
+! south
+         IF(Mask(I,J-1)==1)THEN
+            DTemp(I,J,K)=DTemp(I,J-1,K)
+            Temp(I,J,K)=Temp(I,J-1,K)
+         ENDIF
+! north
+         IF(Mask(I,J+1)==1)THEN
+            DTemp(I,J,K)=DTemp(I,J+1,K)
+         ENDIF
+
+        ENDIF ! mask(i,j)=0
+      ENDDO
+      ENDDO
+      ENDDO
+
+! top and bottom
+      DO J=Jbeg,Jend
+      DO I=Ibeg,Iend
+! bottom
+       DO K=1,Nghost
+        DTemp(I,J,Nghost-K+1)=DTemp(I,J,K+Nghost)
+       ENDDO
+! top
+       DO K=1,Nghost
+        DTemp(I,J,Kend+K)=DTemp(I,J,Kend-K+1)
+       ENDDO
+
+      ENDDO
+      ENDDO     
+
+!print*, mask(52,45),DTemp(52,45,3),mask(53,45),DTemp(53,45,3)
+!stop
+
+
+  IF(ngr==1)THEN       ! fyshi
+# if defined (PARALLEL)
+    if(n_west.eq.MPI_PROC_NULL) then
+# endif
+# if defined (COUPLING)
+    IF(.NOT.IN_DOMAIN_WEST)THEN
+# endif
+    do j = Jbeg,Jend
+    do k = Kbeg,Kend
+      do i = 1,Nghost
+        DTemp(Ibeg-i,j,k) = DTemp(Ibeg+i-1,j,k)
+        Temp(Ibeg-i,j,k) = Temp(Ibeg+i-1,j,k)
+      enddo
+    enddo
+    enddo
+# if defined (COUPLING)
+    ENDIF
+# endif
+# if defined (PARALLEL)
+    endif
+# endif
+
+# if defined (PARALLEL)
+    if(n_east.eq.MPI_PROC_NULL) then
+# endif
+# if defined (COUPLING)
+    IF(.NOT.IN_DOMAIN_EAST)THEN
+# endif
+    do j = Jbeg,Jend
+    do k = Kbeg,Kend
+      do i = 1,Nghost
+        DTemp(Iend+i,j,k) = DTemp(Iend-i+1,j,k)
+        Temp(Iend+i,j,k) = Temp(Iend-i+1,j,k)
+      enddo
+    enddo
+    enddo
+# if defined (COUPLING)
+    ENDIF
+# endif
+# if defined (PARALLEL)
+    endif
+# endif
+
+   ENDIF ! end ngr==1  fyshi
+
+# if defined (AMR)
+  IF(ngr==1.OR.nesting_x1d)THEN    ! fyshi
+# endif
+
+# if defined (PARALLEL)
+    if(n_suth.eq.MPI_PROC_NULL) then
+# endif
+# if defined (COUPLING)
+    IF(.NOT.IN_DOMAIN_SOUTH)THEN
+# endif
+    do i = Ibeg,Iend
+    do k = Kbeg,Kend
+      do j = 1,Nghost
+        DTemp(i,Jbeg-j,k) = DTemp(i,Jbeg+j-1,k)
+        Temp(i,Jbeg-j,k) = Temp(i,Jbeg+j-1,k)
+      enddo
+    enddo
+    enddo
+# if defined (COUPLING)
+    ENDIF
+# endif
+# if defined (PARALLEL)
+    endif
+# endif 
+
+# if defined (PARALLEL)
+    if(n_nrth.eq.MPI_PROC_NULL) then
+# endif
+# if defined (COUPLING)
+    IF(.NOT.IN_DOMAIN_NORTH)THEN
+# endif
+    do i = Ibeg,Iend
+    do k = Kbeg,Kend
+      do j = 1,Nghost
+        DTemp(i,Jend+j,k) = DTemp(i,Jend-j+1,k)
+        Temp(i,Jend+j,k) = Temp(i,Jend-j+1,k)
+      enddo
+    enddo
+    enddo
+# if defined (COUPLING)
+    ENDIF
+# endif
+# if defined (PARALLEL)
+    endif
+# endif
+
+# if defined (AMR)
+   ENDIF ! end ngr==1 or nesting_x1d    fyshi
+# endif
+
+
+    do i = Ibeg,Iend
+    do j = Jbeg,Jend
+      do k = 1,Nghost
+        DTemp(i,j,Kbeg-k) = DTemp(i,j,Kbeg+k-1)
+        Temp(i,j,Kbeg-k) = Temp(i,j,Kbeg+k-1)
+      enddo
+      do k = 1,Nghost
+        DTemp(i,j,Kend+k) = DTemp(i,j,Kend-k+1)
+        Temp(i,j,Kend+k) = Temp(i,j,Kend-k+1)
+      enddo
+    enddo
+    enddo
+
+    end subroutine temp_bc
+
+
+! end temp
+
 # endif
 
     subroutine eval_dens
@@ -11561,7 +11749,8 @@ SUBROUTINE hot_start
 
 # if defined (SALINITY)
 ! sali
-     call sali_bc(1)  
+     call sali_bc(1) 
+     call temp_bc(1) 
 
 # if defined (PARALLEL)
      call phi_3D_exch(Sali)
