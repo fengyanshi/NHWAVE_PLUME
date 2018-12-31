@@ -2,11 +2,11 @@
 % based on two-layer KdV solution
 
 % parameters you input
-rho1=eqstate(20,23); % (temp, sali)
-rho2=eqstate(20,24);
-h1=100; % upper layer thickness in meters
-h2=900; % lower layer thickness in meters
-a=20.0; % amplitude of soliton
+rho1=eqstate(15,15); % (temp, sali)
+rho2=eqstate(15,25);
+h1=30; % upper layer thickness in meters
+h2=70; % lower layer thickness in meters
+a=5.0; % amplitude of soliton
 
 % reduced gravity
 g_reduced=9.81*abs(rho1-rho2)/rho1
