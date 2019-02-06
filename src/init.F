@@ -229,6 +229,8 @@
 
 # if defined(AIR_PRESSURE)
      Pmb = ZERO
+     dPmbX = ZERO
+     dPmbY = ZERO
 # endif
 
 # if defined (SALINITY)
@@ -881,7 +883,7 @@ END SUBROUTINE INITIALIZATION
 # endif
 
 # if defined (AIR_PRESSURE)
-     ALLOCATE(Pmb(Mloc,Nloc))
+     ALLOCATE(Pmb(Mloc,Nloc),dPmbX(Mloc,Nloc),dPmbY(Mloc,Nloc))
 # endif
 
 # if defined (VEGETATION)

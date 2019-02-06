@@ -1164,12 +1164,12 @@
      do i = Ibeg,Iend
        ic = indx(i,j,k)
 
-# if defined (AIR_PRESSURE)
-!  air pressure
-       Rhs(ic) = Rhs(ic) - Rho0*( Coef(ic,4)*Pmb(I,J-1) + Coef(ic,5)*Pmb(I-1,J) &
-                                + Coef(ic,6)*Pmb(I,J) &
-                            + Coef(ic,7)*Pmb(I+1,J) + Coef(ic,8)*Pmb(I,J+1) )
-# endif
+!# if defined (AIR_PRESSURE)
+!  air pressure, I move this source to hydrostatic process, 02/06/2019
+!       Rhs(ic) = Rhs(ic) - Rho0*( Coef(ic,4)*Pmb(I,J-1) + Coef(ic,5)*Pmb(I-1,J) &
+!                                + Coef(ic,6)*Pmb(I,J) &
+!                            + Coef(ic,7)*Pmb(I+1,J) + Coef(ic,8)*Pmb(I,J+1) )
+!# endif
 
        Coef(ic,4) = Zero
        Coef(ic,5) = Zero
@@ -3965,6 +3965,17 @@
        SourceY(i,j) = Grav*Eta(i,j)*DelyH(i,j)*Mask9(i,j)
      enddo
      enddo
+
+# if defined (AIR_PRESSURE)
+
+     do j = Jbeg,Jend
+     do i = Ibeg,Iend
+       SourceX(i,j) = SourceX(i,j) + dPmbX(i,j)
+       SourceY(i,j) = SourceY(i,j) + dPmbY(i,j)
+     enddo
+     enddo
+
+# endif
 
      end subroutine source_terms
  
@@ -11742,6 +11753,21 @@ SUBROUTINE hot_start
      call phi_3D_exch(W)
 # if defined (AIR_PRESSURE)
      call phi_2D_coll(Pmb)
+
+! calculate dPmb
+
+    DO J=Jbeg,Jend
+    DO I=Ibeg,Iend
+       dPmbX(I,J) = -Grav*Hc(I,J)*  &
+               (Pmb(I+1,J)-Pmb(I-1,J))/2.0_SP  &
+               /DX
+       dPmbY(I,J) = -Grav*Hc(I,J)*  &
+               (Pmb(I,J+1)-Pmb(I,J-1))/2.0_SP  &
+               /DY
+    ENDDO
+    ENDDO
+
+
 # endif
   ! endif air pressure
 

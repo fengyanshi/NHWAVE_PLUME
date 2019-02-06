@@ -1,4 +1,4 @@
-         parameter(m=512,n=1,m1=720,n1=480,l=30,l1=39)
+         parameter(m=128,n=1,m1=720,n1=480,l=30,l1=39)
          real,dimension(m,n) :: var2D
          real,dimension(m,n,l) :: var3D,Zsigma
          real,dimension(m1,n1) :: var2D_fine
@@ -13,7 +13,7 @@
          eta_right = -0.0
          Temp=15.0
          Sali=25.0
-         Usea=13.0
+         Usea=0.0
 
          S_top = 23.0
          S_mid = 23.2
@@ -31,11 +31,11 @@
 
          dx=5.0
          dy=5.0
-         x_c=1000.0
-! width (m)
+         x_c=300.0
+! width (sigma /2, in meters)
          sigma = 200.0
-! height (cm)
-         a=500.0
+! height (m)
+         a=1.0
          
 
          do i=1,m
