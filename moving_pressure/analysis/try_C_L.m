@@ -2,7 +2,7 @@
 % based on two-layer KdV solution
 
 % parameters you input
-rho1=eqstate(15,15); % (temp, sali)
+rho1=eqstate(15,10); % (temp, sali)
 rho2=eqstate(15,25);
 h1=30; % upper layer thickness in meters
 h2=70; % lower layer thickness in meters
