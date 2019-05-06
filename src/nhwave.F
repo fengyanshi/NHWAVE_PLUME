@@ -11335,7 +11335,8 @@
         ic = i2-i+2  ! local index
         jc = j2-j+2  
         do k = 1,Kloc
-          zm(k) = sigc(k)*D(i2,j2)-Hc(i2,j2)
+! Liangyi pointed out the bug, previous code uses sigc 05/06/2019
+          zm(k) = sig(k)*D(i2,j2)-Hc(i2,j2)
           rhos(k) = Rho(i2,j2,k)
         enddo
 
