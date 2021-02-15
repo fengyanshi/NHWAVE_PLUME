@@ -1,0 +1,7 @@
+RESULT_FOLDER = /Volumes/DISK_2020_5/CONN_SM_CURR/dx3125m_cur05_r10/
+Mglob = 1320
+Nglob = 3080
+Kglob = 40
+Nlayer = 40
+Nstart = 2
+Nend = 32
