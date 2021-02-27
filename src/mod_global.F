@@ -52,6 +52,7 @@
 # if defined (AIR_PRESSURE)
      real(SP), dimension(:,:), allocatable :: Pmb,dPmbX,dPmbY
      CHARACTER(LEN=80) :: Pmb_HotStart_File
+     real(SP) :: ResX,ResY,DetaX,DetaY
 # endif
 
 # if defined (SEDIMENT)

@@ -4224,7 +4224,26 @@
 
      end subroutine probes
 
- 
+# if defined(AIR_PRESSURE)
+     subroutine writeout_resistance
+     use global
+     implicit none
+     integer :: n,iu,i,j,k
+     character(len=80) :: STAT_FILE,FDIR,FILE_NUM
+
+     FDIR = TRIM(RESULT_FOLDER)
+     
+       iu = 11
+       write(FILE_NUM(1:4),'(I4.4)') n
+       STAT_FILE = TRIM(FDIR)//'resis.txt'
+       open(iu,file=TRIM(STAT_FILE),access='APPEND')
+         write(iu,'(3E16.8)') time,ResX,ResY       
+       close(iu)
+
+     end subroutine writeout_resistance
+# endif
+  ! endif resistance
+
      subroutine estimate_dt
 !----------------------------------------------------
 !    This subroutine is used to estimate dt
@@ -11666,7 +11685,7 @@ SUBROUTINE hot_start
      character(LEN=80) :: file=''
      REAL(SP),DIMENSION(:,:,:),ALLOCATABLE :: TMP_READ
      REAL(SP),DIMENSION(Mloc,Nloc) :: R1
-     REAL(SP) :: TIME0
+     REAL(SP) :: TIME0,myvar
      REAL(SP) :: Cmiu =0.09 ! note: not sure if it can be changed
 
      open(5,file='time0.dat')
@@ -11755,8 +11774,6 @@ SUBROUTINE hot_start
 # if defined (AIR_PRESSURE)
      call phi_2D_coll(Pmb)
 
-! calculate dPmb
-
     DO J=Jbeg,Jend
     DO I=Ibeg,Iend
        dPmbX(I,J) = -Grav*Hc(I,J)*  &
@@ -11767,7 +11784,6 @@ SUBROUTINE hot_start
                /DY
     ENDDO
     ENDDO
-
 
 # endif
   ! endif air pressure

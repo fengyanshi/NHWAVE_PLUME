@@ -13,7 +13,7 @@ PROGRAM MASTER
 # endif
      IMPLICIT NONE
      REAL(SP) :: tbegin,tend
-     INTEGER :: Kgrid,Isubgrid
+     INTEGER :: Kgrid,Isubgrid,myvar
      INTEGER :: Ksubgrid_internal,NumInternal
 
 
@@ -144,15 +144,15 @@ END PROGRAM MASTER
 # ifndef AMR
   ! not AMR
 ! -----------------------------------------------
-!  This is Gengfeng's original main program
+!  This is Gengfengs original main program
 !  I moved his main from nhwave.F here
 !  last update 08/24/2013, fyshi
 ! -----------------------------------------------
 SUBROUTINE SINGLE_GRID_LOOP
      USE GLOBAL
      IMPLICIT NONE
-     integer :: j,Istage
-     REAL(SP) :: tbegin,tend
+     integer :: i,j,Istage
+     REAL(SP) :: tbegin,tend,myvar
      INTEGER :: Kgrid,Isubgrid
      INTEGER :: Ksubgrid_internal,NumInternal
 
@@ -284,6 +284,50 @@ SUBROUTINE SINGLE_GRID_LOOP
            call probes
          endif
        endif
+
+       ! output resistance
+
+# if defined (AIR_PRESSURE)
+
+         Plot_Count_Stat = Plot_Count_Stat+dt
+         if(Plot_Count_Stat>=Plot_Intv_Stat) then
+           Plot_Count_Stat=Plot_Count_Stat-Plot_Intv_Stat
+
+      ! calculate resistance
+    ResX = 0.0
+    ResY = 0.0
+    DO J=Jbeg,Jend
+    DO I=Ibeg,Iend
+
+! resistance
+       IF(ABS(Pmb(I,J))>0.0)THEN       
+         DetaX = (ETA(I+1,J)-ETA(I-1,J))/2.0_SP/DX
+         DetaY = (ETA(I,J+1)-ETA(I,J-1))/2.0_SP/DY
+         ResX=ResX+Pmb(I,J)*DetaX
+         ResY=ResY+Pmb(I,J)*DetaY        
+       ENDIF
+
+    ENDDO
+    ENDDO
+
+!print*,'TIME=',TIME,myid
+!print*,ResX,ResY,ETA(600,3)
+
+# if defined (PARALLEL)
+     call MPI_ALLREDUCE(ResX,myvar,1,MPI_SP,MPI_SUM,MPI_COMM_WORLD,ier)
+     ResX = myvar
+     call MPI_ALLREDUCE(ResY,myvar,1,MPI_SP,MPI_SUM,MPI_COMM_WORLD,ier)
+     ResY = myvar
+# endif
+
+!print*,'reduce',ResX,ResY,ETA(600,3)
+
+    call writeout_resistance
+    endif
+
+# endif
+ ! end air pressure
+
 
        ! field output to files
        if(TIME>=Plot_Start) then

@@ -25,7 +25,7 @@
 #         FLAG_15 = -DX1D
 #          FLAG_16 = -DOBSTACLE
 #          FLAG_17 = -DMASK3D_TOPLAYER
-          FLAG_18 = -DFROUDE_CAP
+#          FLAG_18 = -DFROUDE_CAP
 #          FLAG_19 = -DUPWINDING
           FLAG_20 = -DAIR_PRESSURE
 #--------------------------------------------------------------------------

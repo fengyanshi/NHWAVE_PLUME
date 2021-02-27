@@ -9,3 +9,6 @@
   case_01, static case, Mglob=128, dx=5m,xc=300m, width=100m, amplitude=1m
   case_02, dynamic case,Mglob=512, dx=5m,xc=1000m, width=100m, amplitude=1m, u=11m
 
+
+NOTE: YOU HAVE TO USE PARALLEL TO MAKE A PERIDOC BOUNDARY CONDITION
+

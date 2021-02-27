@@ -36,21 +36,21 @@ DEPTH_FILE = depth.txt
 ! cell numbers
 Mglob = 2048
 Nglob = 1
-Kglob = 100
+Kglob = 50
 
 ! --------------------PROCESSOR NUMBER-------------------------
 ! processors in x and y direction (for parallel run)
-PX = 32
+PX = 2
 PY = 1
 
 ! -----------------------TIME----------------------------------
 ! time: total computational time/ plot time / screen interval 
 ! all in seconds
 SIM_STEPS = 100000000
-TOTAL_TIME =8000.0
+TOTAL_TIME =1000.0
 PLOT_START = 0.0
-PLOT_INTV = 100.0
-SCREEN_INTV = 100.0
+PLOT_INTV = 10.0
+SCREEN_INTV = 10.0
 
 ! ------------------------GRID----------------------------------
 ! grid sizes
