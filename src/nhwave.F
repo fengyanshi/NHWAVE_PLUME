@@ -4230,19 +4230,34 @@
      implicit none
      integer :: n,iu,i,j,k
      character(len=80) :: STAT_FILE,FDIR,FILE_NUM
+     LOGICAL :: FirstCallStation = .TRUE.
+     SAVE FirstCallStation,iu
 
-     FDIR = TRIM(RESULT_FOLDER)
-     
+     if (FirstCallStation) then
+       FirstCallStation = .FALSE.
+       FDIR = TRIM(RESULT_FOLDER)
        iu = 11
-       write(FILE_NUM(1:4),'(I4.4)') n
        STAT_FILE = TRIM(FDIR)//'resis.txt'
-       open(iu,file=TRIM(STAT_FILE),access='APPEND')
+# if defined(PARALLEL)
+      IF(myid .eq. 0) THEN
+       open(iu,file=TRIM(STAT_FILE))
+      ENDIF
+# else
+       open(iu,file=TRIM(STAT_FILE))
+# endif
+     endif
+     
+# if defined(PARALLEL)
+      IF(myid .eq. 0) THEN
          write(iu,'(3E16.8)') time,ResX,ResY       
-       close(iu)
+      ENDIF
+# else
+         write(iu,'(3E16.8)') time,ResX,ResY       
+# endif
 
      end subroutine writeout_resistance
 # endif
-  ! endif resistance
+  ! endif airpressure
 
      subroutine estimate_dt
 !----------------------------------------------------
