@@ -535,16 +535,27 @@ SUBROUTINE READ_INPUT
          CALL GET_Float_VAL(Xsource_East,FILE_NAME,'Xsource_East',line)
          CALL GET_Float_VAL(Ysource_Suth,FILE_NAME,'Ysource_Suth',line)
          CALL GET_Float_VAL(Ysource_Nrth,FILE_NAME,'Ysource_Nrth',line)
+
+
+         CALL GET_LOGICAL_VAL(WaveMakerDelay,FILE_NAME,'WaveMakerDelay',line,ierr)
+         IF(ierr==1) THEN
+          WaveMakerDelay = .FALSE.
+          WaveMakerStartTime = 0.0
+         ELSE
+          CALL GET_Float_VAL(WaveMakerStartTime,FILE_NAME,'WaveMakerStartTime',line)
+         ENDIF
 # if defined (PARALLEL)
          if(myid.eq.0) WRITE(3,'(A14,F6.3)')'Xsource_West= ',Xsource_West
          if(myid.eq.0) WRITE(3,'(A14,F6.3)')'Xsource_East= ',Xsource_East
          if(myid.eq.0) WRITE(3,'(A14,F6.3)')'Ysource_Suth= ',Ysource_Suth
          if(myid.eq.0) WRITE(3,'(A14,F6.3)')'Ysource_Nrth= ',Ysource_Nrth
+         if(myid.eq.0) WRITE(3,'(A18,F6.3)')'WaveMakerStartTime= ',WaveMakerStartTime
 # else
          WRITE(3,'(A14,F6.3)')'Xsource_West= ',Xsource_West 
          WRITE(3,'(A14,F6.3)')'Xsource_East= ',Xsource_East
          WRITE(3,'(A14,F6.3)')'Ysource_Suth= ',Ysource_Suth
          WRITE(3,'(A14,F6.3)')'Ysource_Nrth= ',Ysource_Nrth
+         WRITE(3,'(A14,F6.3)')'WaveMakerStartTime= ',WaveMakerStartTime
 # endif
        ENDIF
 

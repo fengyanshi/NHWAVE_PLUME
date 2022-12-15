@@ -3958,6 +3958,13 @@
        enddo
      endif
 
+      IF(TIME < WaveMakerStartTime) THEN
+       SourceC = zero
+      ELSE
+!       do nothing
+!       print*, 'start wavemaker ----------$$$$$$$$$$'
+      ENDIF
+
      ! source terms for momentum eqs.
      do j = Jbeg,Jend
      do i = Ibeg,Iend
@@ -10553,6 +10560,7 @@
     INTEGER,INTENT(IN) :: ng  ! fyshi
     integer, intent(in) :: ISTEP
     real(SP), dimension(:,:,:), allocatable :: R5
+    real(SP), dimension(:,:,:), allocatable :: tmp_Sali0
     real(SP), dimension(:), allocatable :: Acoef,Bcoef,Ccoef,Xsol,Rhs0
     real(SP) :: SchC
     integer :: i,j,k,IVAR,Nlen
@@ -10571,11 +10579,14 @@
     allocate(Ccoef(Nlen))
     allocate(Xsol(Nlen))
     allocate(Rhs0(Nlen))
+    allocate(tmp_Sali0(Mloc,Nloc,Kloc))
 
 ! find the maximum of sali, to avoid overshooting of sali, fyshi 05/23/2013
 ! this is done locally including ghostcells. parallel should be OK because
 ! assuming low characteristic line for tracers
 
+
+    tmp_Sali0=Sali
 
     DO K=1,Kloc
     DO J=1,Nloc
@@ -10628,6 +10639,9 @@
                       R5(1:Mloc,1:Nloc,1:Kloc),&
                       IVAR,ng)   ! fyshi
 # endif
+
+! deal with wavemaker. Because we have added mass at wavemaker location, resulting change in D
+! for adding mass, the salinity will be diluted. Here we recover the change in salinity
 
 
     if(VISCOUS_FLOW) then
@@ -10695,6 +10709,7 @@
 
     endif
 
+
     ! boundary condition and ghost cells
     call sali_bc(ng)    ! fyshi
 
@@ -10722,6 +10737,22 @@
     enddo
     enddo
     enddo
+
+! $$$ fyshi for wave-plume interaction
+
+       IF(WAVEMAKER(1:3)=='INT') THEN
+         DO K=1,Kloc
+         DO J=1,Nloc
+         DO I=1,Mloc
+           if(xc(i)>=Xsource_West-10.and.xc(i)<=Xsource_East+10) then
+             Sali(I,J,K)=tmp_Sali0(I,J,K)
+           endif
+         ENDDO
+         ENDDO
+         ENDDO
+       ENDIF
+! $$$
+
 
 ! remove boundary effects
     do k = 1,Kloc
@@ -10793,6 +10824,7 @@
     deallocate(Ccoef)
     deallocate(Xsol)
     deallocate(Rhs0)
+    deallocate(tmp_Sali0)
 
     return
     end subroutine eval_sali
@@ -11926,8 +11958,7 @@ SUBROUTINE read_3d(phi,filename)
      character(len=80),INTENT(in) :: filename
      REAL(SP),DIMENSION(:,:,:),ALLOCATABLE :: TMP_READ
   
-     ALLOCATE (TMP_READ(Mglob,Nglob,Kglob))
-     
+     ALLOCATE (TMP_READ(Mglob,Nglob,Kglob))     
     
      OPEN(1,FILE=trim(filename),STATUS='OLD')
        DO K=1,Kglob

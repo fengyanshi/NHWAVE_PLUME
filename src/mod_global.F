@@ -123,8 +123,11 @@
                 Freq_Max,Jon_Spc(MaxNumFreq),RanPhs(MaxNumFreq)
      real(SP) :: Sponge_West_Width,Sponge_East_Width,Sponge_South_Width,  &
                 Sponge_North_Width,R_Sponge,A_Sponge, &
-                 Xsource_West,Xsource_East,Ysource_Suth,Ysource_Nrth
+                 Xsource_West,Xsource_East,Ysource_Suth,Ysource_Nrth, &
+                 WaveMakerStartTime
      real(SP), dimension(3) :: ALPHA,BETA
+
+     LOGICAL :: WaveMakerDelay=.FALSE.
 
 ! fyshi added time series boundary condition 12/17/2011
        CHARACTER(LEN=80) :: BoundaryFile,WHAT
